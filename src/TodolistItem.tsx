@@ -1,27 +1,43 @@
-export const TodolistItem = () => {
+import {Button} from "./Button.tsx";
+
+type TodolistItemProps = {
+    title: string
+    tasks: TaskProps[]
+    date?: string
+}
+
+export type TaskProps = {
+    id: number
+    title: string
+    isDone: boolean
+}
+
+export const TodolistItem = ({title, tasks, date}: TodolistItemProps) => {
     return (
         <div>
-            <h3>What to learn</h3>
+            <h3>{title}</h3>
             <div>
                 <input/>
-                <button>+</button>
+                <Button title={'Add task'}/>
             </div>
             <ul>
-                <li>
-                    <input type="checkbox" checked={true}/> <span>HTML&CSS</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={true}/> <span>JS</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={false}/> <span>React</span>
-                </li>
+                {tasks.length === 0 ? (
+                    <p>Тасок нет</p>) : (
+                    tasks.map((task) => {
+                        return (
+                            <li key={task.id}>
+                                <input type="checkbox" checked={task.isDone}/>
+                                <span>{task.title}</span>
+                            </li>
+                        )
+                    }))}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <Button title={'All'}/>
+                <Button title={'Active'}/>
+                <Button title={'Completed'}/>
             </div>
+            <span>{date}</span>
         </div>
     )
 }
