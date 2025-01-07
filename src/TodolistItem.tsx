@@ -1,46 +1,26 @@
-import {FilterValuesType, TasksProps} from "./App.tsx";
-import {Button} from "./Button.tsx";
-
-export type TodolistItemProps = {
-    title: string
-    tasks: TasksProps[]
-    date?: string
-    deleteTask: (id:number) => void
-    changeToDoListFilter:(filter:FilterValuesType) => void
-
-}
-
-export const TodolistItem = ({ changeToDoListFilter,deleteTask,title,tasks,date}:TodolistItemProps) => {
+export const TodolistItem = () => {
     return (
         <div>
-
-            <h3>{title}</h3>
-
+            <h3>What to learn</h3>
             <div>
                 <input/>
-                <Button title='add task'/>
+                <button>+</button>
             </div>
-            {tasks.length ===0? (
-                <p>Тасок нет</p>):(
-                    <ul>
-                {tasks.map((task)=>{
-                    return(
-                        <li key={task.id}>
-                        <input type="checkbox" checked={task.isDone}/>
-                        <span>{task.title}</span>
-                            <Button title='x' onClickHandler={()=> deleteTask(task.id)}/>
-                    </li>
-                    )})}
-                     </ul>
-            )}
+            <ul>
+                <li>
+                    <input type="checkbox" checked={true}/> <span>HTML&CSS</span>
+                </li>
+                <li>
+                    <input type="checkbox" checked={true}/> <span>JS</span>
+                </li>
+                <li>
+                    <input type="checkbox" checked={false}/> <span>React</span>
+                </li>
+            </ul>
             <div>
-                <Button title='All' onClickHandler={()=>  changeToDoListFilter('all')}/>
-                <Button title='Active' onClickHandler={()=>  changeToDoListFilter('active')}/>
-                <Button title='Completed' onClickHandler={()=>  changeToDoListFilter('completed')}/>
-            </div>
-
-            <div>
-                {date}
+                <button>All</button>
+                <button>Active</button>
+                <button>Completed</button>
             </div>
         </div>
     )
