@@ -1,9 +1,12 @@
 import {Button} from "./Button.tsx";
+import {FilterValues} from "./App.tsx";
 
 type TodolistItemProps = {
     title: string
     tasks: TaskProps[]
     date?: string
+    deleteTask: (id: number) => void
+    changeFilter:(filter:FilterValues)=>void
 }
 
 export type TaskProps = {
@@ -12,7 +15,13 @@ export type TaskProps = {
     isDone: boolean
 }
 
-export const TodolistItem = ({title, tasks, date}: TodolistItemProps) => {
+export const TodolistItem = ({
+                                 title,
+                                 tasks,
+                                 date,
+                                 deleteTask,
+                                 changeFilter
+                             }: TodolistItemProps) => {
     return (
         <div>
             <h3>{title}</h3>
@@ -28,14 +37,15 @@ export const TodolistItem = ({title, tasks, date}: TodolistItemProps) => {
                             <li key={task.id}>
                                 <input type="checkbox" checked={task.isDone}/>
                                 <span>{task.title}</span>
+                                <Button title={'X'} onClickHandler={() => deleteTask(task.id)}/>
                             </li>
                         )
                     }))}
             </ul>
             <div>
-                <Button title={'All'}/>
-                <Button title={'Active'}/>
-                <Button title={'Completed'}/>
+                <Button title={'All'} onClickHandler={()=>changeFilter('All')}/>
+                <Button title={'Active'} onClickHandler={()=>changeFilter('Active')}/>
+                <Button title={'Completed'} onClickHandler={()=>changeFilter('Completed')}/>
             </div>
             <span>{date}</span>
         </div>
