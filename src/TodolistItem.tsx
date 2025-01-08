@@ -1,18 +1,20 @@
 import {Button} from "./Button.tsx";
+import {FilteredValue} from "./App.tsx";
 
 type TodolistItemProps = {
     title: string
     tasks: TaskProps[]
     deleteTask: (taskId: number) => void
+    changeTasks: (filter:FilteredValue) => void
 }
 
-type TaskProps = {
+export type TaskProps = {
     id: number
     title: string
     isDone: boolean
 }
 
-export const TodolistItem = ({title, tasks, deleteTask}: TodolistItemProps) => {
+export const TodolistItem = ({title, tasks, deleteTask,changeTasks}: TodolistItemProps) => {
     return (
         <div>
             <h3>{title}</h3>
@@ -32,9 +34,9 @@ export const TodolistItem = ({title, tasks, deleteTask}: TodolistItemProps) => {
                 )))}
             </ul>
             <div>
-                <Button title={'All'} onClickHandler={()=>{}}/>
-                <Button title={'Active'} onClickHandler={()=>{}}/>
-                <Button title={'Completed'} onClickHandler={()=>{}}/>
+                <Button title={'All'} onClickHandler={()=>changeTasks('All')}/>
+                <Button title={'Active'} onClickHandler={()=>changeTasks('Active')}/>
+                <Button title={'Completed'} onClickHandler={()=>changeTasks('Completed')}/>
             </div>
         </div>
     )
