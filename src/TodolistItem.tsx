@@ -1,26 +1,44 @@
-export const TodolistItem = () => {
+import { FilteredValue } from './App'
+import { Button } from './Button'
+
+type TodolistItemProps = {
+    title: string
+    tasks: TaskType[]
+    deleteTask: (taskId: number) => void
+    changeTasks:(filterName:FilteredValue)=>void
+}
+
+type TaskType = {
+    id: number
+    title: string
+    isDone: boolean
+}
+
+export const TodolistItem = ({ title, tasks, deleteTask, changeTasks }: TodolistItemProps) => {
     return (
         <div>
-            <h3>What to learn</h3>
+            <h3>{title}</h3>
             <div>
                 <input />
-                <button>+</button>
+                <Button title={'Add task'} />
             </div>
             <ul>
-                <li>
-                    <input type="checkbox" checked={true} /> <span>HTML&CSS</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={true} /> <span>JS</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={false} /> <span>React</span>
-                </li>
+
+                {tasks.length === 0 ? (<p>Тасок нет</p>) : (
+                    tasks.map((task) => (
+                        <li key={task.id}>
+                            <input type="checkbox" checked={task.isDone} />
+                            <span>{task.title}</span>
+                            <Button title={'x'} onClickHandler={()=>deleteTask(task.id)} />
+                        </li>
+                    ))
+                )}
+
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+            <Button title={'All'} onClickHandler={()=> changeTasks('All')} />
+            <Button title={'Active'} onClickHandler={()=> changeTasks('Active')} />
+            <Button title={'Completed'} onClickHandler={()=> changeTasks('Completed')} />
             </div>
         </div>
     )
