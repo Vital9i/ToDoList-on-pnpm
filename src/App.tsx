@@ -41,7 +41,7 @@ export const App = () => {
             break
     }
 
-const deleteTask = (taskId:()=>void) =>{
+const deleteTask = (taskId:string) =>{
 setTasks( tasks1.filter((t)=>(t.id !== taskId)) )
 }
 
