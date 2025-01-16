@@ -1,3 +1,5 @@
+
+import { KeyboardEvent,ChangeEvent, useState } from 'react'
 import { FilteredValue } from './App'
 import { Button } from './Button'
 
@@ -6,6 +8,7 @@ type TodolistItemProps = {
     tasks: TaskType[]
     deleteTask: (taskId: string) => void
     changeTasks: (filterName: FilteredValue) => void
+    createTask: (titleTask: string) => void
 }
 
 type TaskType = {
@@ -14,25 +17,50 @@ type TaskType = {
     isDone: boolean
 }
 
-export const TodolistItem = ({ title, tasks, deleteTask, changeTasks }: TodolistItemProps) => {
+export const TodolistItem = ({ title, tasks, deleteTask, changeTasks, createTask }: TodolistItemProps) => {
+
+    const [titleTask, setTitleTask] = useState('')
+
+    const createTaskHandler = () => {
+        if (titleTask.trim()) {
+            createTask(titleTask)
+            setTitleTask('')
+        }
+    }
+
+    const changeTitleTaskHandler = (event:ChangeEvent<HTMLInputElement>) => {
+        setTitleTask(event.currentTarget.value)
+    }
+
+    const createTaskOnEnterHandler =(event:KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            createTaskHandler()
+        }
+    }
 
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input />
-                <Button title={'addTask'} onClickHandler={() => { }} />
+                <input value={titleTask}
+                    onChange={changeTitleTaskHandler}
+                    onKeyDown={createTaskOnEnterHandler}
+                />
+                <Button title={'createTask'} onClickHandler={createTaskHandler} />
                 <div>
                     {tasks.length === 0 ? (
                         <p>Тасок нет</p>
                     ) : (
                         <ul>
                             {tasks.map(task => {
+                                    const deleteTaskHandler = ()=>{
+                                        deleteTask(task.id)
+                                    }
                                 return (
                                     <li key={task.id}>
                                         <input type="checkbox" checked={task.isDone} />
                                         <span>{task.title}</span>
-                                        <Button title={'x'} onClickHandler={()=>deleteTask(task.id)} />
+                                        <Button title={'x'} onClickHandler={deleteTaskHandler} />
                                     </li>)
                             })}
                         </ul>

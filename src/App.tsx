@@ -28,6 +28,11 @@ export const App = () => {
         setTasks(tasks1.filter((t) => (t.id !== taskId)))
     }
 
+    const createTask = (titleTask:string) => {
+        setTasks([{ id: v1(), title:titleTask, isDone: false },...tasks1])
+        
+    }
+
     switch (filter) {
         case 'All':
             filteredTasks = tasks1;
@@ -46,6 +51,7 @@ export const App = () => {
                 tasks={filteredTasks}
                 deleteTask={deleteTask}
                 changeTasks={changeTasks}
+                createTask={createTask}
                 />
         </div>
     )
