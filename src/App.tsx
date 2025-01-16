@@ -16,7 +16,6 @@ export const App = () => {
         { id: v1(), title: 'Vue', isDone: false },
     ])
 
-
     let filteredTasks
 
     const [filter, setFilter] = useState<FilteredValue>('All')
@@ -28,11 +27,6 @@ export const App = () => {
     const deleteTask = (taskId: string) => {
         setTasks(tasks1.filter((t) => (t.id !== taskId)))
     }
-
-    const addTask = (newTask: string) => {
-        setTasks([{ id: v1(), title: newTask, isDone: false }, ...tasks1])
-    }
-
 
     switch (filter) {
         case 'All':
@@ -52,8 +46,7 @@ export const App = () => {
                 tasks={filteredTasks}
                 deleteTask={deleteTask}
                 changeTasks={changeTasks}
-                addTask={addTask}
-            />
+                />
         </div>
     )
 }
