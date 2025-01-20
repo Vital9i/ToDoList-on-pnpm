@@ -18,7 +18,7 @@ export const App = () => {
         { id: v1(), title: 'Vue', isDone: false },
     ])
 
-    let filteredTask= tasks
+    let filteredTask = tasks
 
     switch (filter) {
         case 'Active':
@@ -33,21 +33,28 @@ export const App = () => {
         setTasks(tasks.filter(t => t.id !== taskId))
     }
 
-    const filterTasks = (taskValue:FilterValues) => {
+    const filterTasks = (taskValue: FilterValues) => {
         setFilter(taskValue)
     }
 
-    const addTask = (newTaskTitle:string) => {
-        setTasks([{ id: v1(), title: newTaskTitle, isDone: false },...tasks])
+    const addTask = (newTaskTitle: string) => {
+        setTasks([{ id: v1(), title: newTaskTitle, isDone: false }, ...tasks])
+    }
+
+    const changeTaskStatus = (taskId: string, newStatus: boolean) => {
+        const nextState: Task[] = tasks.map(t => t.id === taskId ? { ...t, isDone: newStatus} : t)
+        setTasks(nextState)
     }
 
     return (
         <div className="app">
             <TodolistItem title={'What to learn'}
                 tasks={filteredTask}
+                filter={filter}
                 deleteTask={deleteTask}
-                filterTasks={filterTasks} 
-                addTask={addTask}/>
+                filterTasks={filterTasks}
+                addTask={addTask}
+                changeTaskStatus={changeTaskStatus} />
         </div>
     )
 }
