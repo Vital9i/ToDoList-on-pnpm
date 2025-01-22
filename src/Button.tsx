@@ -2,13 +2,13 @@
 type ButtonType = {
     title:string
     onClickHandler?:()=>void
-    classes?:string
+    className?:string
 }
 
-export const Button = ({title,onClickHandler,classes}:ButtonType) =>{
+export const Button = ({title,onClickHandler, className}:ButtonType) =>{
     return(
   <button 
-  className={classes}
+  className={ className}
   onClick={onClickHandler}>{title}</button>
     )
 }

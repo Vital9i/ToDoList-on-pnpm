@@ -41,10 +41,7 @@ export const App = () => {
         setTasks([{ id: v1(), title: newTaskTitle, isDone: false }, ...tasks])
     }
 
-    const changeTaskStatus = (taskId: string, newStatus: boolean) => {
-        const nextState: Task[] = tasks.map(t => t.id === taskId ? { ...t, isDone: newStatus} : t)
-        setTasks(nextState)
-    }
+
 
     return (
         <div className="app">
@@ -54,7 +51,7 @@ export const App = () => {
                 deleteTask={deleteTask}
                 filterTasks={filterTasks}
                 addTask={addTask}
-                changeTaskStatus={changeTaskStatus} />
+            />
         </div>
     )
 }
