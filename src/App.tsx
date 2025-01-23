@@ -41,7 +41,9 @@ export const App = () => {
         setTasks([{ id: v1(), title: newTaskTitle, isDone: false }, ...tasks])
     }
 
-
+    const changeIsDone = (taskId: string, isDone: boolean) => {
+        setTasks(tasks.map((t) => (t.id === taskId ? { ...t, isDone: isDone } : t)))
+    }
 
     return (
         <div className="app">
@@ -51,7 +53,8 @@ export const App = () => {
                 deleteTask={deleteTask}
                 filterTasks={filterTasks}
                 addTask={addTask}
-            />
+                changeIsDone={changeIsDone}
+                            />
         </div>
     )
 }
