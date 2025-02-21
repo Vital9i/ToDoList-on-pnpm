@@ -11,6 +11,10 @@
   border: 3px solid red;
 }
 
+.errorMessage {
+  color:red
+}
+
 .task {
   font-weight: 900;
 }
@@ -34,15 +38,3 @@
 
 
 
-.div-style {
-text-Align: center;
-margin-Top: 50px;
-margin-left: 50px;
-border: 2px solid black;
-padding: 20px;
-
-}
-
-.final-count {
-  color: red;
-}
