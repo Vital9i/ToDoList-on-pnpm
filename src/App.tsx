@@ -45,8 +45,8 @@ export const App = () => {
         setFilter(filterName)
     }
 
-    const changeIsDone = (tasksId: string, isDone: boolean) => {
-        setTask(tasks.map(el => el.id === tasksId ? {...el,isDone:isDone} : el))
+    const changeIsDone = (taskId: string, isDone: boolean) => {
+        setTask(tasks.map((t) => (t.id === taskId ? { ...t, isDone: isDone } : t)))
     }
 
     return (
