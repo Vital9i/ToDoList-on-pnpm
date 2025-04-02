@@ -42,6 +42,14 @@ export const App = () => {
             { id: v1(), title: 'NextJS', isDone: true },
             { id: v1(), title: 'NodeJS', isDone: false },
         ],
+        [todolistId2]: [
+            { id: v1(), title: 'Rest API', isDone: true },
+            { id: v1(), title: 'GraphQL', isDone: false },
+            { id: v1(), title: 'StyledComponents', isDone: true },
+            { id: v1(), title: 'PHP', isDone: false },
+            { id: v1(), title: 'NextJS', isDone: true },
+            { id: v1(), title: 'NodeJS', isDone: false },
+        ],
     })
 
     const deleteTask = (todoListId: string, taskId: string) => {
