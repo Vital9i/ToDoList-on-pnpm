@@ -12,9 +12,9 @@ type TodolistItemProps = {
     changeFilter: (todoListId: string, filterName: FilterValues) => void
     changeIsDone: (todoListId: string, taskId: string, isDone: boolean) => void
     deleteTodoList: (todoListId: string) => void
-    changeTaskTitle:(todoListId: string, taskId: string,newTaskTitle:string) => void
-    changeTodolistTitle:(todoListId: string,newTaskTitle:string) => void
-  }
+    changeTaskTitle: (todoListId: string, taskId: string, newTaskTitle: string) => void
+    changeTodolistTitle: (todoListId: string, newTaskTitle: string) => void
+}
 
 export type Task = {
     id: string
@@ -23,7 +23,17 @@ export type Task = {
 }
 
 export const TodolistItem = (props: TodolistItemProps) => {
-    const {todolist:{id, title, filter},tasks, deleteTask, createTask, changeFilter, changeIsDone,deleteTodoList,changeTaskTitle, changeTodolistTitle} = props
+    const {
+              todolist: {id, title, filter},
+              tasks,
+              deleteTask,
+              createTask,
+              changeFilter,
+              changeIsDone,
+              deleteTodoList,
+              changeTaskTitle,
+              changeTodolistTitle
+          } = props
 
     const changeFilterHandler = (filterName: FilterValues) => {
         changeFilter(id, filterName)
@@ -39,7 +49,7 @@ export const TodolistItem = (props: TodolistItemProps) => {
         createTask(id, itemTitle)
     }
     const changeTodolistTitleHandler = (newTodolistTitle: string) => {
-        changeTodolistTitle(id,newTodolistTitle)
+        changeTodolistTitle(id, newTodolistTitle)
     }
 
     return (
@@ -53,8 +63,8 @@ export const TodolistItem = (props: TodolistItemProps) => {
                 ) : (
                     tasks.map(t => {
 
-                        const changeTaskTitleHandler = (newTaskTitle:string) => {
-                            changeTaskTitle(id, t.id,newTaskTitle)
+                        const changeTaskTitleHandler = (newTaskTitle: string) => {
+                            changeTaskTitle(id, t.id, newTaskTitle)
                         }
 
                         return (<li key={t.id} className={t.isDone ? 'task-done' : ''}>
@@ -63,7 +73,6 @@ export const TodolistItem = (props: TodolistItemProps) => {
                                 checked={t.isDone}
                                 onChange={(event: ChangeEvent<HTMLInputElement>) => changeIsDoneHandler(t.id, event.currentTarget.checked)}
                             />
-                            {/*<span>{t.title}</span>*/}
                             <EditableSpan title={t.title} onChange={changeTaskTitleHandler}/>
                             <Button title={'X'} onClick={() => deleteTask(id, t.id)}/>
                         </li>)
