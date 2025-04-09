@@ -1,15 +1,22 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react"
-import { Button } from "./Button"
-import { FilterValues, Todolist } from "./App"
+import {ChangeEvent} from "react"
+import Button from "@mui/material/Button";
+import {Box, Checkbox, IconButton, List, ListItem} from "@mui/material";
+import {FilterValues, Todolist} from "./App"
+import {CreateItemForm} from "./CreateItemForm.tsx";
+import {EditableSpan} from "./EditableSpan.tsx";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {getListItemSx} from './TodolistitemStyles.ts'
 
 type TodolistItemProps = {
-    todolist:Todolist
+    todolist: Todolist
     tasks: Task[]
-    deleteTask: (todoListId:string,taskId: string) => void
-    createTask: (todoListId:string,taskTitle: string) => void
-    changeFilter: (todoListId:string,filterName: FilterValues) => void
-    changeIsDone: (todoListId: string,taskId: string, isDone: boolean) => void
-    deleteTodoList: (todoListId:string) => void
+    deleteTask: (todoListId: string, taskId: string) => void
+    createTask: (todoListId: string, taskTitle: string) => void
+    changeFilter: (todoListId: string, filterName: FilterValues) => void
+    changeIsDone: (todoListId: string, taskId: string, isDone: boolean) => void
+    deleteTodoList: (todoListId: string) => void
+    changeTaskTitle: (todoListId: string, taskId: string, newTaskTitle: string) => void
+    changeTodolistTitle: (todoListId: string, newTitle: string) => void
 }
 
 export type Task = {
@@ -18,82 +25,114 @@ export type Task = {
     isDone: boolean
 }
 
-export const TodolistItem = ({ todolist:{id,title,filter},tasks, deleteTask, createTask, changeFilter, changeIsDone,deleteTodoList }: TodolistItemProps) => {
-
-    const [taskTitle, setTaskTitle] = useState('')
-    const [error, setError] = useState<string | null>(null)
-
-    const createTaskHandler = () => {
-        if (taskTitle.trim()) {
-            createTask(id,taskTitle.trim())
-            setTaskTitle('')
-        } else {
-            setError('title is not required')
-        }
-    }
-
-    const changeTaskHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setTaskTitle(event.currentTarget.value)
-        setError(null)
-    }
-
-    const createTaskHandlerOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            createTaskHandler()
-        }
-    }
+export const TodolistItem = (props: TodolistItemProps) => {
+    const {
+              todolist: {id, title, filter},
+              tasks,
+              deleteTask,
+              createTask,
+              changeFilter,
+              changeIsDone,
+              deleteTodoList,
+              changeTaskTitle,
+              changeTodolistTitle
+          } = props
 
     const changeFilterHandler = (filterName: FilterValues) => {
-        changeFilter(id,filterName)
+        changeFilter(id, filterName)
         // setFilter(filterName)
     }
-
     const changeIsDoneHandler = (taskId: string, isDone: boolean) => {
-        changeIsDone(id,taskId, isDone)
+        changeIsDone(id, taskId, isDone)
     }
-
     const deleteTodoListHandler = () => {
         deleteTodoList(id)
+    }
+    const createTaskHandler = (title: string) => {
+        createTask(id, title)
+    }
+    const changeTaskTitleHandler = (taskId: string, newTitle: string) => {
+        changeTaskTitle(id, taskId, newTitle)
+    }
+    const changeTodolistTitleHandler = (newTitle: string) => {
+        changeTodolistTitle(id, newTitle)
     }
 
     return (
         <div>
-            <h3>{title}</h3>
-            <Button title={'X'} onClick={deleteTodoListHandler}/>
-            <div>
-                <input
-                    value={taskTitle}
-                    onChange={changeTaskHandler}
-                    onKeyDown={createTaskHandlerOnEnter}
-                    className={error ? 'error' : ''}
-                />
-                <Button title={'new task'} onClick={createTaskHandler} />
-                <p className={'errorMessage'}>{error}</p>
+
+            <div style={{display: 'flex'}}>
+                <h3>
+                    <EditableSpan title={title} changeTitle={changeTodolistTitleHandler}/>
+                </h3>
+
+                <IconButton aria-label="delete"
+                            onClick={deleteTodoListHandler}>
+                    <DeleteForeverIcon fontSize='small'/>
+                </IconButton>
             </div>
 
-            <ul>
+            <div>
+                <CreateItemForm onCreateItem={createTaskHandler}/>
+            </div>
+
+            <List>
                 {tasks.length === 0 ? (
                     <p>Тасок нет</p>
                 ) : (
                     tasks.map(t => (
-                        <li key={t.id} className={t.isDone ? 'task-done' : ''}>
-                            <input
-                                type="checkbox"
-                                checked={t.isDone}
-                                onChange={(event: ChangeEvent<HTMLInputElement>) => changeIsDoneHandler(t.id, event.currentTarget.checked)}
-                            />
-                            <span>{t.title}</span>
-                            <Button title={'X'} onClick={() => deleteTask(id,t.id)} />
-                        </li>
+
+                        <ListItem key={t.id}
+                                  disablePadding
+                                  sx={getListItemSx(t.isDone)}
+                        >
+                            <Box>
+                                <Checkbox
+                                    size="small"
+                                    checked={t.isDone}
+                                    onChange={(event: ChangeEvent<HTMLInputElement>) => changeIsDoneHandler(t.id, event.currentTarget.checked)}
+                                />
+                                <EditableSpan title={t.title}
+                                              changeTitle={(newTitle) => changeTaskTitleHandler(t.id, newTitle)}/>
+                            </Box>
+                            <Box></Box>
+
+                            <IconButton
+                                aria-label="delete"
+                                onClick={() => deleteTask(id, t.id)}>
+                                <DeleteForeverIcon fontSize="small"/>
+                            </IconButton>
+                        </ListItem>
                     ))
                 )}
-            </ul>
+            </List>
 
-            <div>
-                <Button title={'All'} className={ filter === 'all'? 'filterBtn-active': ''} onClick={() => changeFilterHandler('all')} />
-                <Button title={'Active'} className={ filter === 'active'? 'filterBtn-active': ''} onClick={() => changeFilterHandler('active')} />
-                <Button title={'Completed'} className={ filter === 'completed'? 'filterBtn-active': ''} onClick={() => changeFilterHandler('completed')} />
-            </div>
+            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                <Button
+                    variant='contained'
+                    size="small"
+                    disableElevation
+                    color={filter === 'all' ? 'secondary' : 'primary'}
+                    onClick={() => changeFilterHandler('all')}>
+                    All
+                </Button>
+                <Button
+                    variant='contained'
+                    size="small"
+                    disableElevation
+                    color={filter === 'active' ? 'secondary' : 'primary'}
+                    onClick={() => changeFilterHandler('active')}>
+                    Active
+                </Button>
+                <Button
+                    variant='contained'
+                    size="small"
+                    disableElevation
+                    color={filter === 'completed' ? 'secondary' : 'primary'}
+                    onClick={() => changeFilterHandler('completed')}>
+                    Completed
+                </Button>
+            </Box>
         </div>
     )
 }
