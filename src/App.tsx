@@ -78,7 +78,7 @@ export const App = () => {
 
     return (
         <div className="app">
-
+<div><CreateItemForm createItem={createTodolist}/></div>
             <CreateItemForm createItem={createTodolist}/>
 
             {todolists.map(el => {

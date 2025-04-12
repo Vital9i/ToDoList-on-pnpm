@@ -59,6 +59,7 @@ export const TodolistItem = (props: TodolistItemProps) => {
             <CreateItemForm createItem={createTaskHandler}/>
             <ul>
                 {tasks.length === 0 ? (
+
                     <p>Тасок нет</p>
                 ) : (
                     tasks.map(t => {
