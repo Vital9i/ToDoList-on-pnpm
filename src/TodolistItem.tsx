@@ -1,8 +1,10 @@
 import {ChangeEvent} from "react"
-import {Button} from "./Button"
+import {containerSx, getListItemSx} from './TodolistItem.styles'
 import {FilterValues, Todolist} from "./App"
 import {CreateItemForm} from "./CreateItemForm.tsx";
 import {EditableSpan} from "./EditableSpan.tsx";
+import {Box, Button, Checkbox, List, ListItem} from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 type TodolistItemProps = {
     todolist: Todolist
@@ -24,7 +26,7 @@ export type Task = {
 
 export const TodolistItem = (props: TodolistItemProps) => {
     const {
-              todolist: {id, title, filter},
+              todolist: {id, title},
               tasks,
               deleteTask,
               createTask,
@@ -37,7 +39,6 @@ export const TodolistItem = (props: TodolistItemProps) => {
 
     const changeFilterHandler = (filterName: FilterValues) => {
         changeFilter(id, filterName)
-        // setFilter(filterName)
     }
     const changeIsDoneHandler = (taskId: string, isDone: boolean) => {
         changeIsDone(id, taskId, isDone)
@@ -55,9 +56,9 @@ export const TodolistItem = (props: TodolistItemProps) => {
     return (
         <div>
             <h3><EditableSpan title={title} onChange={changeTodolistTitleHandler}/></h3>
-            <Button title={'X'} onClick={deleteTodoListHandler}/>
+            <Button onClick={deleteTodoListHandler}><DeleteIcon/></Button>
             <CreateItemForm createItem={createTaskHandler}/>
-            <ul>
+            <List>
                 {tasks.length === 0 ? (
 
                     <p>Тасок нет</p>
@@ -68,28 +69,25 @@ export const TodolistItem = (props: TodolistItemProps) => {
                             changeTaskTitle(id, t.id, newTaskTitle)
                         }
 
-                        return (<li key={t.id} className={t.isDone ? 'task-done' : ''}>
-                            <input
-                                type="checkbox"
-                                checked={t.isDone}
-                                onChange={(event: ChangeEvent<HTMLInputElement>) => changeIsDoneHandler(t.id, event.currentTarget.checked)}
-                            />
-                            <EditableSpan title={t.title} onChange={changeTaskTitleHandler}/>
-                            <Button title={'X'} onClick={() => deleteTask(id, t.id)}/>
-                        </li>)
-
+                        return (
+                            <ListItem key={t.id}
+                                      sx={getListItemSx(t.isDone)}>
+                                <div>
+                                <Checkbox checked={t.isDone}
+                                          onChange={(event: ChangeEvent<HTMLInputElement>) => changeIsDoneHandler(t.id, event.currentTarget.checked)}/>
+                                <EditableSpan title={t.title} onChange={changeTaskTitleHandler}/>
+                                </div>
+                                <Button onClick={() => deleteTask(id, t.id)}><DeleteIcon/></Button>
+                            </ListItem>)
                     })
                 )}
-            </ul>
+            </List>
 
-            <div>
-                <Button title={'All'} className={filter === 'all' ? 'filterBtn-active' : ''}
-                        onClick={() => changeFilterHandler('all')}/>
-                <Button title={'Active'} className={filter === 'active' ? 'filterBtn-active' : ''}
-                        onClick={() => changeFilterHandler('active')}/>
-                <Button title={'Completed'} className={filter === 'completed' ? 'filterBtn-active' : ''}
-                        onClick={() => changeFilterHandler('completed')}/>
-            </div>
+            <Box sx={containerSx}>
+                <Button variant="contained" onClick={() => changeFilterHandler('all')}>All</Button>
+                <Button variant="contained" onClick={() => changeFilterHandler('active')}>Active</Button>
+                <Button variant="contained" onClick={() => changeFilterHandler('completed')}>Completed</Button>
+            </Box>
         </div>
     )
 }

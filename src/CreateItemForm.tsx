@@ -1,11 +1,13 @@
 import {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button} from "./Button.tsx";
+import { TextField} from '@mui/material'
+import IconButton from "@mui/material/IconButton";
+import AddBoxIcon from '@mui/icons-material/AddBox'
 
 type CreateItemFormProps = {
     createItem: (itemTitle: string) => void
 }
 
-export const CreateItemForm = (props:  CreateItemFormProps) => {
+export const CreateItemForm = (props: CreateItemFormProps) => {
     const {createItem} = props
     const [ItemTitle, setItemTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -29,14 +31,18 @@ export const CreateItemForm = (props:  CreateItemFormProps) => {
     }
     return (
         <div>
-            <input
-                value={ItemTitle}
-                onChange={changeItemHandler}
-                onKeyDown={createItemHandlerOnEnter}
-                className={error ? 'error' : ''}
+            <TextField id="outlined-basic"
+                       label="Enter title"
+                       variant="outlined"
+                       value={ItemTitle}
+                       onChange={changeItemHandler}
+                       onKeyDown={createItemHandlerOnEnter}
+                       error={!!error}
+                       helperText={error}
             />
-            <Button title={'+'} onClick={createItemHandler}/>
-            <p className={'errorMessage'}>{error}</p>
+            <IconButton onClick={createItemHandler} color={'primary'}>
+                <AddBoxIcon />
+            </IconButton>
         </div>
     )
 }
